@@ -2,7 +2,8 @@
   pkgs,
   config,
   ...
-}: {
+}:
+{
   programs.tmux = {
     enable = true;
     prefix = "C-a";
@@ -32,9 +33,9 @@
         '';
       }
       {
-        plugin = catppuccin;
+        plugin = power-theme;
         extraConfig = ''
-          set -g @catppuccin_window_status_style "rounded"
+          set -g @tmux_power_theme 'color8'
         '';
       }
     ];
