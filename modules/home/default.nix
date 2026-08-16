@@ -8,7 +8,6 @@
     ./niri.nix
     ./shell.nix
     ./tmux.nix
-    ./variables.nix
     ./nixvim
     ./standalone-packages.nix
   ];
