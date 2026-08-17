@@ -1,5 +1,6 @@
-{ pkgs, ... }: {
+{
   imports = [
+    ./spotify-player.nix
     ./copilot.nix
     ./git.nix
     ./kitty.nix
