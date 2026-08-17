@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   programs.librewolf = {
     enable = true;
     profiles.default = {
@@ -7,6 +7,7 @@
           ublock-origin
           vimium
           darkreader
+          proton-pass
         ];
       };
     };
