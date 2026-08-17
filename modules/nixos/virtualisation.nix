@@ -3,7 +3,6 @@
     libvirtd = {
       enable = true;
       qemu = {
-        package = null;
         runAsRoot = false;
         swtpm.enable = true;
       };
@@ -31,5 +30,5 @@
   virtualisation.spiceUSBRedirection.enable = true;
   programs.virt-manager.enable = true;
 
-  users.users.operator.extraGroups = [ "libvirtd" "kvm" "docker" ];
+  users.users.operator.extraGroups = ["libvirtd" "kvm" "docker"];
 }
