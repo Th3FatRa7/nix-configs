@@ -1,5 +1,6 @@
 {
   imports = [
+    ./obs-studio.nix
     ./spotify-player.nix
     ./copilot.nix
     ./git.nix
