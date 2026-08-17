@@ -25,6 +25,8 @@
   i18n.defaultLocale = "en_US.UTF-8";
   console.keyMap = "us";
 
+  hardware.enableRedistributableFirmware = true;
+
   boot.tmp.cleanOnBoot = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
   services.fstrim.enable = true;
