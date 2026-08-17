@@ -2,6 +2,8 @@
 
   home.packages = with pkgs; [
     lsd
+    bat
+    bat-extras.core
   ];
 
   programs.starship = {
@@ -51,6 +53,12 @@
     "...." = "cd ../../..";
     pd = "cd - > /dev/null";
     tree = "lsd --tree";
+
+    # Bat
+    # TODO: Change the theme to something like Carbonfox
+    cat = "bat";
+    man = "batman";
+    rg = "batgrep";
 
     # Tools
     e = "$EDITOR";
