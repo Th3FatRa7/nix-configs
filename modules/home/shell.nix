@@ -1,16 +1,62 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
+
+  home.packages = with pkgs; [
+    lsd
+  ];
+
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+    presets = [
+      "no-runtime-versions"
+    ];
+  };
+
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
   programs.zsh = {
     enable = true;
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-    shellAliases = {
-      rebuild = "sudo nixos-rebuild switch --flake ~/Projects/nix-configs#$(hostname)";
+    defaultKeymap = "viins";
+
+    history = {
+      save = 100000;
+      size = 100000;
+      share = true;
+      ignoreDups = true;
+      ignoreSpace = true;
+      expireDuplicatesFirst = true;
     };
-    initContent = ''
-      eval "$(zoxide init zsh)"
-      fastfetch
-    '';
   };
-  home.packages = with pkgs; [eza fastfetch fzf zoxide btop fd bat];
+
+  home.shellAliases = {
+    # FS and Terminal
+    c = "clear";
+    x = "exit";
+    l = "lsd --group-directories-first --color=always";
+    la = "l -alg";
+    ll = "l -lg";
+    ".." = "cd ..";
+    "..." = "cd ../..";
+    "...." = "cd ../../..";
+    pd = "cd - > /dev/null";
+    tree = "lsd --tree";
+
+    # Tools
+    e = "$EDITOR";
+    g = "git";
+
+    # Nixos
+    rebuild = "sudo nixos-rebuild switch --flake";
+  };
 }

@@ -1,7 +1,6 @@
 { pkgs, ... }: {
   imports = [
     ./copilot.nix
-    ./aliases.nix
     ./git.nix
     ./kitty.nix
     ./librewolf.nix
