@@ -1,5 +1,5 @@
 {pkgs, ...}: {
-  programs.niri.enable = true;
+  programs.hyprland.enable = true;
   services.xserver = {
     enable = true;
     desktopManager.cinnamon.enable = true;

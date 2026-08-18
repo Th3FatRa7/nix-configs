@@ -1,12 +1,12 @@
 {
   imports = [
+    ./hyprland
     ./obs-studio.nix
     ./spotify-player.nix
     ./copilot.nix
     ./git.nix
     ./kitty.nix
     ./librewolf.nix
-    ./niri.nix
     ./shell.nix
     ./tmux.nix
     ./nixvim
