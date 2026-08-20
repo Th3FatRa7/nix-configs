@@ -30,6 +30,8 @@
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    noctalia.url = "github:noctalia-dev/noctalia/cachix";
   };
 
   outputs = inputs @ {
@@ -39,6 +41,7 @@
     flake-parts,
     disko,
     wsl,
+    noctalia,
     ...
   }:
     flake-parts.lib.mkFlake {inherit inputs;} {
@@ -85,16 +88,16 @@
 
         nixosConfigurations = {
           wsl = mkHost {
-            hostname = "mercury";
+            hostname = "wsl";
             modules = [./hosts/wsl];
           };
-          gaming-laptop = mkHost {
-            hostname = "gaming-laptop";
-            modules = [./hosts/gaming-laptop];
+          katana = mkHost {
+            hostname = "katana";
+            modules = [./hosts/katana];
           };
-          programming-laptop = mkHost {
-            hostname = "hp-laptop";
-            modules = [./hosts/hp-laptop];
+          laptop = mkHost {
+            hostname = "laptop";
+            modules = [./hosts/laptop];
           };
           homelab = mkHost {
             hostname = "homelab";
