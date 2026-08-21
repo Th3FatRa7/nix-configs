@@ -7,6 +7,7 @@
 
     settings = {
       background_opacity = 0.85;
+      window_padding_width = 10;
 
       cursor_blink_interval = "0.5 ease-in-out";
       cursor_stop_blinking_after = 0;
