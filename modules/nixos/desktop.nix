@@ -1,11 +1,7 @@
 {pkgs, ...}: {
   programs.hyprland.enable = true;
-  services.xserver = {
-    enable = true;
-    desktopManager.cinnamon.enable = true;
-  };
   services.displayManager.ly.enable = true;
-  services.displayManager.defaultSession = "cinnamon";
+  services.displayManager.defaultSession = "hyprland";
 
   hardware.graphics.enable = true;
   xdg.portal = {
