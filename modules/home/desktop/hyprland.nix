@@ -1,4 +1,6 @@
-# Inspired by the structure of this example config https://github.com/hyprwm/Hyprland/blob/main/example/hyprland.lua
+# Inspirations:
+# https://github.com/hyprwm/Hyprland/blob/main/example/hyprland.lua
+# https://git.helcel.net/sora/nixconfig/src/branch/main/modules/home/wayland/hyprland/config.nix
 {lib, ...}: {
   wayland.windowManager.hyprland = {
     enable = true;
@@ -47,8 +49,9 @@
 
           blur = {
             enabled = true;
-            size = 2;
+            size = 5;
             passes = 1;
+            new_optimizations = true;
           };
         };
 
