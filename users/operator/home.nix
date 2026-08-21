@@ -2,7 +2,6 @@
   imports = [
     ../../modules/home/common
     ../../modules/home/agent
-    ../../modules/home/apps
     ../../modules/home/desktop
     ../../modules/home/dev
   ];

@@ -5,5 +5,6 @@
     ./noctalia.nix
     ./librewolf.nix
     ./gtk.nix
+    ./apps
   ];
 }

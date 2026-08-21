@@ -1,6 +1,6 @@
 {
   imports = [
     ./obs-studio.nix
-    ./spotify-player.nix
+    ./spotify.nix
   ];
 }
