@@ -1,15 +1,34 @@
 # Inspirations:
 # https://github.com/hyprwm/Hyprland/blob/main/example/hyprland.lua
 # https://git.helcel.net/sora/nixconfig/src/branch/main/modules/home/wayland/hyprland/config.nix
-{lib, ...}: {
+{lib, ...}: let
+  default = {
+    terminal = "kitty";
+    browser = "librewolf";
+    launcher = "noctalia msg panel-toggle launcher";
+  };
+
+  lua = lib.generators.mkLuaInline;
+
+  bind = keys: dispatcher: {_args = [keys dispatcher];};
+
+  dsp = {
+    exec = cmd: lua ''hl.dsp.exec_cmd("${cmd}")'';
+    close = lua "hl.dsp.window.close()";
+    float = lua ''hl.dsp.window.float({ action = "toggle" })'';
+    fullscreen = lua "hl.dsp.window.fullscreen()";
+    focus = dir: lua ''hl.dsp.focus({ direction = "${dir}" })'';
+    move = dir: lua ''hl.dsp.window.move({ direction = "${dir}" })'';
+    focusWorkspace = ws: lua ''hl.dsp.focus({ workspace = "${toString ws}" })'';
+    moveToWorkspace = ws: lua ''hl.dsp.window.move({ workspace = "${toString ws}", follow = false})'';
+  };
+in {
   wayland.windowManager.hyprland = {
     enable = true;
     systemd.enable = true;
     configType = "lua";
 
-    settings = let
-      mkLua = lib.generators.mkLuaInline;
-    in {
+    settings = {
       # ---- MONITORS ----
       monitor = {
         output = "";
@@ -18,15 +37,10 @@
         scale = 1;
       };
 
-      # ---- PROGRAMS ----
-      terminal._var = "kitty";
-      browser._var = "librewolf";
-      launcher._var = "noctalia msg panel-toggle launcher";
-
       # ---- AUTOSTART ----
       on._args = [
         "hyprland.start"
-        (mkLua "function()\n  hl.exec_cmd(\"noctalia\")\nend")
+        (lua ''function() hl.exec_cmd("noctalia") end'')
       ];
 
       config = {
@@ -65,36 +79,50 @@
         # ---- INPUT ----
         input = {
           kb_layout = "us";
+          kb_options = "ctrl:nocaps";
         };
       };
 
       # ---- KEYBINDINGS ----
-      mainMod._var = "SUPER";
-
-      bind = let
-        mkBind = keys: dispatcher: {
-          _args = [
-            (mkLua keys)
-            (mkLua dispatcher)
-          ];
-        };
-      in [
+      bind = [
         # programs
-        (mkBind "mainMod .. \" + b\"" "hl.dsp.exec_cmd(browser)")
-        (mkBind "mainMod .. \" + Return\"" "hl.dsp.exec_cmd(terminal)")
-        (mkBind "mainMod .. \" + t\"" "hl.dsp.exec_cmd(terminal)") # Glove80 has Mod + Ret on the same thumb
-        (mkBind "mainMod .. \" + d\"" "hl.dsp.exec_cmd(launcher)")
+        (bind "SUPER + B" (dsp.exec default.browser))
+        (bind "SUPER + RETURN" (dsp.exec default.terminal))
+        (bind "SUPER + T" (dsp.exec default.terminal))
+        (bind "SUPER + SPACE" (dsp.exec default.launcher))
 
         # move focus (vim like)
-        (mkBind "mainMod .. \" + h\"" "hl.dsp.focus({ direction = \"left\" })")
-        (mkBind "mainMod .. \" + j\"" "hl.dsp.focus({ direction = \"down\" })")
-        (mkBind "mainMod .. \" + k\"" "hl.dsp.focus({ direction = \"up\" })")
-        (mkBind "mainMod .. \" + l\"" "hl.dsp.focus({ direction = \"right\" })")
+        (bind "SUPER + H" (dsp.focus "left"))
+        (bind "SUPER + J" (dsp.focus "down"))
+        (bind "SUPER + K" (dsp.focus "up"))
+        (bind "SUPER + L" (dsp.focus "right"))
+
+        (bind "SUPER + SHIFT + H" (dsp.move "left"))
+        (bind "SUPER + SHIFT + J" (dsp.move "down"))
+        (bind "SUPER + SHIFT + K" (dsp.move "up"))
+        (bind "SUPER + SHIFT + L" (dsp.move "right"))
 
         # window action
-        (mkBind "mainMod .. \" + q\"" "hl.dsp.window.close()")
-        (mkBind "mainMod .. \" + f\"" "hl.dsp.window.fullscreen({ mode = \"fullscreen\", action = \"toggle\" })")
-        (mkBind "mainMod .. \" + v\"" "hl.dsp.window.float({ action = \"toggle\" })")
+        (bind "SUPER + Q" (dsp.close))
+        (bind "SUPER + F" (dsp.fullscreen))
+        (bind "SUPER + V" (dsp.float))
+
+        # media
+        (bind "XF86AudioPlay" (dsp.exec "noctalia msg media toggle"))
+        (bind "XF86AudioPrev" (dsp.exec "noctalia msg media previous"))
+        (bind "XF86AudioNext" (dsp.exec "noctalia msg media next"))
+
+        # volume
+        (bind "XF86AudioRaiseVolume" (dsp.exec "noctalia msg volume-up"))
+        (bind "XF86AudioLowerVolume" (dsp.exec "noctalia msg volume-down"))
+        (bind "XF86AudioMute" (dsp.exec "noctalia msg volume-mute"))
+
+        # brightness
+        (bind "XF86MonBrightnessUp" (dsp.exec "noctalia msg brightness-up"))
+        (bind "XF86MonBrightnessDown" (dsp.exec "noctalia msg brightness-down"))
+
+        # lock
+        (bind "CTRL + ALT + L" (dsp.exec "noctalia msg session lock"))
       ];
     };
 
@@ -102,8 +130,8 @@
     extraConfig = ''
       for i = 1, 10 do
         local key = i % 10
-        hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = i }))
-        hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
+        hl.bind("SUPER + " .. key, hl.dsp.focus({ workspace = i }))
+        hl.bind("SUPER + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
       end
     '';
   };
